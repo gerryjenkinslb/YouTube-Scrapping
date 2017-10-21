@@ -116,7 +116,7 @@ def html_out(channel, sections):
 
 def csv_out(channel, sections):
     """ create and output channel_name.csv file for import into a spreadsheet or DB"""
-    headers = 'channel,section,playlist,video,' + \
+    headers = 'channel,section,playlist,video,' \
               'link,time,views,publication date,likes,dislikes,description'.split(',')
 
     with open(f'{channel}.csv', "w") as csv_file:
