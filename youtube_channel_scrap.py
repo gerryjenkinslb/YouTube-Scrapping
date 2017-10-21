@@ -43,28 +43,27 @@ def get_playlists(section):
     soup = get_soup(section['link'])
     if soup == None: # no playlist, create dummy playlist and default link
        return [{'title':'No Playlists', 'link':f'https://youtube.com/{channel_name}/videos'}]
-    divs = soup('a', class_="yt-uix-tile-link")
+    atags = soup('a', class_="yt-uix-tile-link")
 
     playlists = []
-    for d in divs:  # find title and link
-        title = d.text
+    for a in atags:  # find title and link
+        title = a.text
         if title != "Liked videos": # skip these
-            link = fix_url(d['href'])
+            link = fix_url(a['href'])
             playlists.append({'title':title, 'link':link})
     if playlists == []: return [{'title':'No Playlists',
                                  'link':f'https://youtube.com/{channel_name}/videos'}]
     return playlists
 
 def add_videos(playlist):
-    """find videos in playlist[link] and add their info as playlink[videos] as list"""
+    """find videos in playlist[link] and add their info as playlist[videos] as list"""
     soup = get_soup(playlist['link'])
     print(f"    getting videos for playlist: {playlist['title']}")
-    # open('videos.html','w').write(htmldoc.text)
-    items = soup('a', class_="yt-uix-tile-link")
+    items = soup('a', class_="yt-uix-tile-link") # items are list of video a links from list
     videos = []
-    for i in items:
+    for i in items: # note first part of look get info from playlist page item, and the the last part opens
+                    # the video and gets more details
         d = {} # collect video info in dict
-        # a = i.find('a',class_="pl-video-title-link")
         d['title'] = i.text.strip()
         link = fix_url(i['href'])
         d['link'] = link
@@ -73,7 +72,6 @@ def add_videos(playlist):
         print(f"      open video '{d['title']}' for details", end=" ")
 
         vsoup = get_soup(link) # now get video page and pull information from it
-
         print("* read, now processing",end="")
         views= vsoup.find('div', class_='watch-view-count').text
         d['views'] = ''.join(c for c in views if c in "0123456789")
@@ -89,15 +87,16 @@ def add_videos(playlist):
         videos.append(d)
         print("* finished video")
 
-        playlist['videos'] = videos
+        playlist['videos'] = videos # add new key to this playlist of list of video infos
 
-def tag(t,c): return f'<{t}>{c}</{t}>'
-def link(text, url): return f'<a href="{url}">{text}</a>'
+def tag(t,c): return f'<{t}>{c}</{t}>' # return html tag with content
+def link(text, url): return f'<a href="{url}">{text}</a>' # return a tag with content and link
 
 def html_out(channel, sections):
+    '''create and write channel_name.html file'''
     title = f"YouTube Channel {channel}"
     f = open(f"{channel}.html",'w')
-    template = ' <!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">' + \
+    template = '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">' + \
     '<title>{}</title>\n</head>\n<body>\n{}\n</body>\n</html>'
 
     parts = []
@@ -112,11 +111,11 @@ def html_out(channel, sections):
                 parts.append(tag('li',link(video['title'], video['short_link']) \
                                  + ' (' + video['time'] + ")"))
             parts.append('</ol>')
-    f.write(template.format(channel, str('\n'.join(parts))))
+    f.write(template.format(channel, '\n'.join(parts)))
     f.close()
-    pass
 
-def csv_out(channel, sections): # headers chanel name, playlist name, video name, short url, time,
+def csv_out(channel, sections):
+    """ create and output channel_name.csv file for import into a spreadsheet or DB"""
     headers = 'channel,section,playlist,video,' + \
               'link,time,views,publication date,likes,dislikes,description'.split(',')
 
