@@ -81,9 +81,11 @@ def add_videos(playlist):
         id = vsoup.find('meta', itemprop="videoId")['content']
         d['short_link'] = f'https://youtu.be/{id}'
         likebutton = vsoup.find('button', class_="like-button-renderer-like-button")
-        d['likes'] = likebutton.find('span',class_ = 'yt-uix-button-content').text
+        o = likebutton.find('span',class_ = 'yt-uix-button-content')
+        d['likes'] = o.text if o else ""
         disbutton = vsoup.find('button',class_='like-button-renderer-dislike-button')
-        d['dislikes'] = disbutton.find('span',class_ = 'yt-uix-button-content').text
+        o = disbutton.find('span',class_ = 'yt-uix-button-content')
+        d['dislikes'] = o.text if o else ""
         videos.append(d)
         print("* finished video")
 
