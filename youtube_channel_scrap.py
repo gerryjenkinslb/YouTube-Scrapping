@@ -19,7 +19,7 @@ wait_between_requests = 3
 """
 
 # set youtube channel name here
-channel_name = 'UCH4aPBlmmW1Vgs0ykktCMUg'
+channel_name = 'gjenkinslbcc'
 
 
 youtube_base = 'https://www.youtube.com/'
