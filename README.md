@@ -6,3 +6,4 @@ Scrap your YouTube Channel and create html table of contents and excel csv infor
 
 *see YouTube video for code walkthrough at [https://youtu.be/NvxAhUkVgHU](https://youtu.be/NvxAhUkVgHU)*
 
+![MacDown Screenshot](https://www.dropbox.com/s/mk1pgc8qqn2xxod/PyCharmVenvDiag3.png?dl=0)
