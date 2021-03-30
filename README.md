@@ -1,4 +1,7 @@
 # YouTube-Scrapping
+
+THIS CODE DOES NOT WORK with the new youtube channel updates. You need to use the youtube API or a headless browser scrapping approach. I may do one of these in the future.
+
 Scrap your YouTube Channel and create html table of contents and excel csv information file
 
 *see blog article at
